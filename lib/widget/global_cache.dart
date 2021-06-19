@@ -9,18 +9,18 @@ class GlobalCache {
 
   GlobalCache._();
 
-  LoginData _loginData;
+  LoginData  loginData;
   String errorMessage;
 
   LoginData getUser() {
-    return _loginData;
+    return loginData;
   }
 
   void setData(LoginData _data) {
-    _loginData = _data;
+    loginData = _data;
   }
 
   void clearData() {
-    _loginData = null;
+    loginData = null;
   }
 }

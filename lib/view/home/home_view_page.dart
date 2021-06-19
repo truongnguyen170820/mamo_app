@@ -3,6 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mamo_app/bloc/home/home_bloc.dart';
 import 'package:mamo_app/bloc/home/home_envet.dart';
 import 'package:mamo_app/bloc/home/home_state.dart';
+import 'package:mamo_app/bloc/profile/profile_bloc.dart';
+import 'package:mamo_app/bloc/profile/profile_event.dart';
+import 'package:mamo_app/bloc/profile/profile_state.dart';
 import 'package:mamo_app/bloc/readers/readers_bloc.dart';
 import 'package:mamo_app/bloc/readers/readers_event.dart';
 import 'package:mamo_app/bloc/readers/readers_state.dart';
@@ -14,9 +17,12 @@ import 'package:mamo_app/utils/screen_utils.dart';
 import 'package:mamo_app/utils/text_styles.dart';
 import 'package:mamo_app/utils/utilities.dart';
 import 'package:mamo_app/view/home/deltail_read_page.dart';
+import 'package:mamo_app/view/login/LoginViewPage.dart';
+import 'package:mamo_app/view/profile/profile_view.dart';
 import 'package:mamo_app/widget/app_constant.dart';
 import 'package:mamo_app/widget/circle_avatar.dart';
 import 'package:mamo_app/widget/custombutton.dart';
+import 'package:mamo_app/widget/global_cache.dart';
 
 class HomeViewPage extends StatefulWidget {
   const HomeViewPage({Key key}) : super(key: key);
@@ -36,6 +42,7 @@ class _HomeViewPageState extends State<HomeViewPage> {
     _homeBloc.add(HomeStattedEvent());
     _readersBloc = BlocProvider.of<ReadersBloc>(context);
     _readersBloc.add(ReadersStartedEvent());
+    BlocProvider.of<ProfileBloc>(context).add(ProfileGetEvent());
     // TODO: implement initState
     super.initState();
   }
@@ -163,20 +170,19 @@ class _HomeViewPageState extends State<HomeViewPage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _buildItemTutorial("Đọc truyện", ontap: () {
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) =>
-                      ReadDeltailPage(type: AppConstants.READ_TYPE_BOOK)));
+        _buildItemTutorial("Đọc truyện", ontap: () async {
+          final result = await pushTo(context, ReadDeltailPage(type: AppConstants.READ_TYPE_BOOK));
+          if(result){
+            _homeBloc.add(HomeStattedEvent());
+            _readersBloc.add(ReadersStartedEvent());
+          }
         }),
-        _buildItemTutorial("Đọc báo", ontap: () {
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => ReadDeltailPage(
-                        type: AppConstants.READ_TYPE_NEWS,
-                      )));
+        _buildItemTutorial("Đọc báo", ontap: () async{
+          final result = await pushTo(context, ReadDeltailPage(type: AppConstants.READ_TYPE_NEWS));
+          if(result){
+            _homeBloc.add(HomeStattedEvent());
+            _readersBloc.add(ReadersStartedEvent());
+          }
         })
       ],
     );
@@ -276,27 +282,89 @@ class _HomeViewPageState extends State<HomeViewPage> {
     });
   }
   Widget _drawView(){
-    return Column(
-      children: [
-        Container(
-          height: setHeight(150),
-        color: ColorUtils.colorTextLogo,
-          child: Row(
+    // ignore: missing_required_param
+    return BlocBuilder<ProfileBloc, ProfileState>(
+      builder: (context, state){
+        return  Drawer(
+          child: Column(
             children: [
-              circleAvatar("", "", radius: 30),
+              GestureDetector(
+                onTap: (){
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=> ProfileView()));
+                },
+                child: Container(
+                  padding: EdgeInsets.only(left: setWidth(16), right: setWidth(16)),
+                  height: setHeight(150),
+                  color: ColorUtils.colorTextLogo,
+                  child: Row(
+                    children: [
+                      circleAvatar(GlobalCache().loginData.fullName ??"", GlobalCache().loginData.fullName ??"", radius: 30),
+                      SizedBox(width: setWidth(10)),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(GlobalCache().loginData.fullName ??"", style: FontUtils.medium.copyWith(color: ColorUtils.WHITE)),
+                          Text(GlobalCache().getUser().userName??"", style: FontUtils.normal.copyWith(color: ColorUtils.WHITE, fontSize: setSp(12))),
+                        ],
+                      ),
+                      Spacer(),
+                      Icon(Icons.arrow_forward_ios_outlined, color: ColorUtils.WHITE, size: 15)
+                    ],
+                  ),
+                ),
+              ),
+              _buildItemMenu("Bảng thành tích", "achievements.png"),
+              _buildItemMenu("Lịch sử kiếm tiền", "history.png"),
+              _buildItemMenu("Thành viên cấp dưới", "member.png"),
+              _buildItemMenu("Hướng dẫn kiếm tiền", "tutorial.png"),
+              _buildItemMenu("Top độc giả", "top.png"),
+              _buildItemMenu("Giới thiệu bạn bè", "share.png"),
+              Spacer(),
+              ButtonCustom(
+                title: "Đăng suất",
+                textStyle: FontUtils.medium.copyWith(color: ColorUtils.WHITE),
+                borderRadius: 12,
+                bgColor: ColorUtils.colorTextLogo,
+                width: setWidth(200),
+                height: setHeight(45),
+                onTap: (){
+                  Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                          LoginViewPage()),
+                          (route) => false);
+                },
+              ),
+              SizedBox(height: setHeight(20))
             ],
           ),
-        ),
-
-      ],
+        );
+      }
     );
   }
-  Widget _buildItemDraw(){
-    return Container(
-      child: Row(
-        children: [
-          
-        ],
+  _buildItemMenu(String name, String imageUrl,{Function ontap}) {
+    return GestureDetector(
+      onTap: ontap,
+      child: Container(
+        margin: EdgeInsets.only(left: setWidth(16), right: setWidth(16)),
+        padding: EdgeInsets.only(bottom: setHeight(16), top: setHeight(19)),
+        decoration: BoxDecoration(
+            border: Border(
+                bottom: BorderSide(width: 1, color: ColorUtils.underlined))),
+        child: Row(
+          children: [
+            Image.asset(getAssetsIcon(imageUrl),
+                height: setHeight(19), width: setWidth(17)),
+            SizedBox(width: setWidth(16)),
+            Text(
+              name,
+              style: FontUtils.medium.copyWith(color: ColorUtils.NUMBER_PAGE),
+            ),
+            Spacer(),
+          ],
+        ),
       ),
     );
   }

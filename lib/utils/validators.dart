@@ -5,6 +5,12 @@ class Validator {
     return value.isNotEmpty && value.length >= 6;
   }
 
+  bool IsEmail(String _email)
+  {
+    return RegExp(
+        r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$')
+        .hasMatch(_email);
+  }
   bool isPhoneNumber(String value) {
     String pattern = r'(^(?:[+0][9|3|8|7|1|5])?[0-9]{8,10}$)';
     RegExp regExp = new RegExp(pattern);
