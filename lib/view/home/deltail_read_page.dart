@@ -1,3 +1,4 @@
+import 'package:clipboard/clipboard.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mamo_app/bloc/request_task/request_task_bloc.dart';
@@ -69,7 +70,7 @@ class _ReadDeltailPageState extends State<ReadDeltailPage> {
                 children: [
                   Text(state.requestTask != null
                       ? state.requestTask.description ?? ""
-                      : ""),
+                      : "", textAlign: TextAlign.justify,textScaleFactor: 1.1,),
                   Row(
                     // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
@@ -95,7 +96,9 @@ class _ReadDeltailPageState extends State<ReadDeltailPage> {
                         textStyle:
                             FontUtils.medium.copyWith(color: ColorUtils.WHITE),
                         onTap: () {
-                          Navigator.pop(context);
+                          FlutterClipboard.copy(state.requestTask.url??"");
+                          Utilities.showToast(
+                              context, "Đã copy đường dẫn trang web");
                         },
                       ),
                     ],

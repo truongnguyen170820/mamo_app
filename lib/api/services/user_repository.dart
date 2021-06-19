@@ -2,6 +2,8 @@ import 'package:mamo_app/api/api_constants.dart';
 import 'package:mamo_app/api/api_response.dart';
 import 'package:mamo_app/api/api_service.dart';
 import 'package:mamo_app/model/login_request.dart';
+import 'package:mamo_app/model/update_profile_request.dart';
+import 'package:mamo_app/widget/app_constant.dart';
 
 class UserRepository {
   // User Login
@@ -33,5 +35,33 @@ class UserRepository {
     await ApiService(ApiConstants.GET_RECENT_REWARDS, {}).getResponse();
     return apiResponse.data;
   }
+  // Profile
+  Future<JDIResponse> getProfile() async {
+    ApiResponse apiResponse =
+    await ApiService(ApiConstants.GET_PROFILE, {}).getResponse();
+    return apiResponse.data;
+  }
+  // Account
+  Future<JDIResponse> getAccount() async {
+    ApiResponse apiResponse =
+    await ApiService(ApiConstants.GET_ACCOUNT, {}).getResponse();
+    return apiResponse.data;
+  }
+  //UpdateProfile
+  Future<JDIResponse> getUpdateProfile(String fullName, String address, String gender,
+      String birthDay, String email, String momoMoblie, String momoName) async {
+    ApiResponse apiResponse =
+    await ApiService(ApiConstants.UPDATE_PROFILE,
+      UpdateProfileRequest(fullName: fullName, address:  address, gender: gender, birthdayStr:  birthDay, email: email, momoMobile: momoMoblie, momoName: momoName).toJson()
+    ).getResponse();
+    return apiResponse.data;
+  }
 
+  Future<JDIResponse> withdrawalHistory({num type, int pageIndex = 1}) async {
+    ApiResponse apiResponse =
+    await ApiService(ApiConstants.TRANSACTION_HIS,
+        {"Type": type, "PageIndex" : pageIndex, "PageSize" : AppConstants.PAGE_SIZE}
+        ).getResponse();
+    return apiResponse.data;
+  }
 }

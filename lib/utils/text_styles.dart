@@ -1,6 +1,7 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:mamo_app/utils/color_utils.dart';
 import 'package:mamo_app/utils/colors.dart';
 import 'package:mamo_app/utils/font_utils.dart';
 import 'package:mamo_app/utils/global_functions.dart';
@@ -68,6 +69,8 @@ class TextStyles {
   factory TextStyles() {
     return _instance;
   }
+  static final String font1 = 'SFUIText';
+  static TextStyle hint = TextStyle(fontFamily: font1, fontSize: setSp(12), color: ColorUtils.gray6,);
 
   TextStyles._internal();
 }

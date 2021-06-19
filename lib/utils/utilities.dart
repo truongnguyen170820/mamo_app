@@ -97,4 +97,6 @@ class Utilities {
     if (url.startsWith("http://")) return url;
     return ApiConstants.BASE_IMAGE_URL + url;
   }
+
+
 }
