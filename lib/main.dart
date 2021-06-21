@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mamo_app/api/services/task_repository.dart';
 import 'package:mamo_app/api/services/user_repository.dart';
 import 'package:mamo_app/bloc/account/account_bloc.dart';
+import 'package:mamo_app/bloc/achievements/history_transaction/history_transaction_bloc.dart';
 import 'package:mamo_app/bloc/auth/authentication_bloc.dart';
 import 'package:mamo_app/bloc/auth/authentication_event.dart';
 import 'package:mamo_app/bloc/auth/authentication_state.dart';
@@ -41,7 +42,8 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (_) => ReadersBloc(_userRepository)),
         BlocProvider(create: (_) => ProfileBloc(_userRepository)),
         BlocProvider(create: (_) => AccountBloc(_userRepository)),
-        BlocProvider(create: (_) => UpdateProfileBloc(_userRepository))
+        BlocProvider(create: (_) => UpdateProfileBloc(_userRepository)),
+        BlocProvider(create: (_) => HistoryTransactionBloc(_userRepository)),
       ],
       child: ScreenUtilInit(
         designSize: Size(375, 690),

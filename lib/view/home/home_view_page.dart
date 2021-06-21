@@ -16,6 +16,7 @@ import 'package:mamo_app/utils/global_functions.dart';
 import 'package:mamo_app/utils/screen_utils.dart';
 import 'package:mamo_app/utils/text_styles.dart';
 import 'package:mamo_app/utils/utilities.dart';
+import 'package:mamo_app/view/achievements/achievements_view.dart';
 import 'package:mamo_app/view/home/deltail_read_page.dart';
 import 'package:mamo_app/view/login/LoginViewPage.dart';
 import 'package:mamo_app/view/profile/profile_view.dart';
@@ -282,7 +283,6 @@ class _HomeViewPageState extends State<HomeViewPage> {
     });
   }
   Widget _drawView(){
-    // ignore: missing_required_param
     return BlocBuilder<ProfileBloc, ProfileState>(
       builder: (context, state){
         return  Drawer(
@@ -314,7 +314,9 @@ class _HomeViewPageState extends State<HomeViewPage> {
                   ),
                 ),
               ),
-              _buildItemMenu("Bảng thành tích", "achievements.png"),
+              _buildItemMenu("Bảng thành tích", "achievements.png", ontap: (){
+                pushTo(context, AchievementsView());
+              }),
               _buildItemMenu("Lịch sử kiếm tiền", "history.png"),
               _buildItemMenu("Thành viên cấp dưới", "member.png"),
               _buildItemMenu("Hướng dẫn kiếm tiền", "tutorial.png"),

@@ -12,7 +12,7 @@ import 'package:mamo_app/utils/font_utils.dart';
 import 'package:mamo_app/utils/global_functions.dart';
 import 'package:mamo_app/utils/screen_utils.dart';
 import 'package:mamo_app/utils/utilities.dart';
-import 'package:mamo_app/view/achievements_view.dart';
+import 'file:///F:/filecuatruong/mamo_app/lib/view/achievements/achievements_view.dart';
 import 'package:mamo_app/view/profile/update_profile_view.dart';
 import 'package:mamo_app/widget/app_constant.dart';
 import 'package:mamo_app/widget/circle_avatar.dart';

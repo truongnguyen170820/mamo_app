@@ -24,7 +24,8 @@ class ReadersBloc extends Bloc<ReadersEvent, ReadersState> {
             .map((e) => RecentRewardReader.fromJson(e))
             .toList();
         yield state.updateWith(
-            status: AppConstants.STATUS_SUCCESS, recentRewardReader: result);
+            status: AppConstants.STATUS_SUCCESS,
+            recentRewardReader: result);
       }else{
         yield state.updateWith(
           status: AppConstants.STATUS_FAILURE,
